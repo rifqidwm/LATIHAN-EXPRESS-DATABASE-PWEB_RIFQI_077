@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "DompetKos API",
+    "description": "Pengujian REST API DompetKos (Express). Jalankan server dengan npm run dev terlebih dahulu.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET",
+      "item": [
+        {
+          "name": "Ambil semua pengeluaran",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses"
+              ]
+            },
+            "description": "200, seluruh data"
+          }
+        },
+        {
+          "name": "Filter per kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses?kategori=makan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses"
+              ],
+              "query": [
+                {
+                  "key": "kategori",
+                  "value": "makan"
+                }
+              ]
+            },
+            "description": "200, memakai req.query"
+          }
+        },
+        {
+          "name": "Ambil satu pengeluaran",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "1"
+              ]
+            },
+            "description": "200, memakai req.params"
+          }
+        },
+        {
+          "name": "Ambil id yang tidak ada (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "999"
+              ]
+            },
+            "description": "404"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST",
+      "item": [
+        {
+          "name": "Tambah pengeluaran",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses"
+              ]
+            },
+            "description": "201, data baru",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kategori\": \"makan\",\n  \"nominal\": 12000,\n  \"tanggal\": \"2026-11-03\",\n  \"catatan\": \"Es teh dan gorengan\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Tambah dengan data tidak valid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses"
+              ]
+            },
+            "description": "400, ditolak middleware validasi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kategori\": \"jajan\",\n  \"nominal\": -5000,\n  \"tanggal\": \"03-11-2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT",
+      "item": [
+        {
+          "name": "Ubah pengeluaran",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "2"
+              ]
+            },
+            "description": "200, data diganti",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kategori\": \"makan\",\n  \"nominal\": 18000,\n  \"tanggal\": \"2026-11-01\",\n  \"catatan\": \"Nasi pecel + es teh\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Ubah id yang tidak ada (404)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "999"
+              ]
+            },
+            "description": "404",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kategori\": \"makan\",\n  \"nominal\": 18000,\n  \"tanggal\": \"2026-11-01\",\n  \"catatan\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE",
+      "item": [
+        {
+          "name": "Hapus pengeluaran",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "3"
+              ]
+            },
+            "description": "200, data yang dihapus dikembalikan"
+          }
+        },
+        {
+          "name": "Hapus id yang tidak ada (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/expenses/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "expenses",
+                "999"
+              ]
+            },
+            "description": "404"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Route tidak terdaftar (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/alamat-lain",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "alamat-lain"
+          ]
+        },
+        "description": "404 dari middleware notFound"
+      }
+    }
+  ]
+}

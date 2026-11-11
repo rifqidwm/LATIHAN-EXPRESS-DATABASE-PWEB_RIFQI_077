@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// URL database tidak ditulis di sini (Prisma 7), tapi di prisma.config.ts dan .env
+datasource db {
+  provider = "postgresql"
+}
+
+enum Kategori {
+  makan
+  transport
+  kos
+  belanja
+  hiburan
+  lainnya
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  kategori  Kategori
+  nominal   Int
+  tanggal   DateTime @db.Date
+  catatan   String   @default("") @db.VarChar(60)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("expenses")
+}

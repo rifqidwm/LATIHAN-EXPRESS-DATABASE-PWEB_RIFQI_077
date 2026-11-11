@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DompetKos, catatan pengeluaran anak kos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="#ringkasan" class="brand">
+        <span class="brand__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+        </span>
+        DompetKos
+      </a>
+      <nav class="navbar__links" aria-label="Navigasi utama">
+        <a href="#ringkasan">Ringkasan</a>
+        <a href="#catat">Catat</a>
+        <a href="#riwayat">Riwayat</a>
+      </nav>
+      <span class="status" id="apiStatus" data-state="loading">
+        <span class="status__dot" aria-hidden="true"></span>
+        <span class="status__text">Menghubungkan</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="ringkasan" class="summary" aria-labelledby="ringkasanTitle">
+      <h1 id="ringkasanTitle" class="visually-hidden">Ringkasan pengeluaran</h1>
+
+      <div class="glass total-card">
+        <p class="total-card__label">Total pengeluaran</p>
+        <p class="total-card__value" id="totalValue">Rp0</p>
+        <p class="total-card__hint">Dari semua catatan yang tersimpan di server</p>
+      </div>
+
+      <div class="glass stat-card">
+        <p class="stat-card__label">Jumlah catatan</p>
+        <p class="stat-card__value" id="countValue">0</p>
+      </div>
+
+      <div class="glass stat-card">
+        <p class="stat-card__label">Paling banyak di</p>
+        <p class="stat-card__value" id="topValue">-</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="kategoriTitle" class="categories">
+      <h2 id="kategoriTitle" class="section-title">Kategori</h2>
+      <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
+    </section>
+
+    <div class="workspace">
+      <section id="catat" class="glass panel" aria-labelledby="catatTitle">
+        <h2 id="catatTitle" class="panel__title">Catat pengeluaran</h2>
+        <form id="addForm" class="form" novalidate>
+          <label class="field">
+            <span>Kategori</span>
+            <select name="kategori" required></select>
+          </label>
+          <label class="field">
+            <span>Nominal (Rp)</span>
+            <input type="number" name="nominal" min="1" step="1" inputmode="numeric" placeholder="15000" required />
+          </label>
+          <label class="field">
+            <span>Tanggal</span>
+            <input type="date" name="tanggal" required />
+          </label>
+          <label class="field">
+            <span>Catatan</span>
+            <input type="text" name="catatan" maxlength="60" placeholder="Nasi pecel depan kampus" />
+          </label>
+          <button type="submit" class="btn btn--primary">Simpan pengeluaran</button>
+        </form>
+      </section>
+
+      <section id="riwayat" class="glass panel panel--list" aria-labelledby="riwayatTitle">
+        <div class="panel__head">
+          <h2 id="riwayatTitle" class="panel__title">Riwayat</h2>
+          <span class="panel__meta" id="filterInfo">Semua kategori</span>
+        </div>
+        <ul class="list" id="list" aria-live="polite"></ul>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="editDialog" class="glass dialog" aria-labelledby="editTitle">
+    <h2 id="editTitle" class="panel__title">Ubah pengeluaran</h2>
+    <form id="editForm" class="form" novalidate>
+      <input type="hidden" name="expenseId" />
+      <label class="field">
+        <span>Kategori</span>
+        <select name="kategori" required></select>
+      </label>
+      <label class="field">
+        <span>Nominal (Rp)</span>
+        <input type="number" name="nominal" min="1" step="1" inputmode="numeric" required autofocus />
+      </label>
+      <label class="field">
+        <span>Tanggal</span>
+        <input type="date" name="tanggal" required />
+      </label>
+      <label class="field">
+        <span>Catatan</span>
+        <input type="text" name="catatan" maxlength="60" />
+      </label>
+      <div class="dialog__actions">
+        <button type="button" class="btn btn--ghost" data-close>Batal</button>
+        <button type="submit" class="btn btn--primary">Simpan perubahan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="deleteDialog" class="glass dialog dialog--small" aria-labelledby="deleteTitle" aria-describedby="deleteDesc">
+    <h2 id="deleteTitle" class="panel__title">Hapus pengeluaran ini?</h2>
+    <p id="deleteDesc" class="dialog__desc"></p>
+    <form method="dialog" class="dialog__actions">
+      <button value="cancel" class="btn btn--ghost" autofocus>Batal</button>
+      <button value="delete" class="btn btn--danger">Hapus</button>
+    </form>
+  </dialog>
+
+  <div class="toast glass" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
